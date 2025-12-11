@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  secureshare-backend:
+    build: ./backend
+    container_name: secureshare-backend
+    environment:
+      - RATE_LIMIT_MAX=30
+      - FRONTEND_ORIGIN=http://localhost
+    networks:
+      - secureshare-net
+
+  secureshare-frontend:
+    build: ./frontend
+    container_name: secureshare-frontend
+    ports:
+      - "8080:80" # pour debug local; Nginx Proxy Manager pointera vers ce container dans le homelab
+    networks:
+      - secureshare-net
+    depends_on:
+      - secureshare-backend
+
+networks:
+  secureshare-net:
+    driver: bridge
